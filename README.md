@@ -1,111 +1,50 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+<p align="center">
+  <img src="https://img.shields.io/badge/React-19-61DAFB" alt="React 19">
+  <img src="https://img.shields.io/badge/Vite-6-646CFF" alt="Vite">
+  <img src="https://img.shields.io/badge/Gemini-API-4285F4" alt="Gemini API">
+  <img src="https://img.shields.io/badge/status-private-lightgrey" alt="status: private">
+</p>
 
-# Calculo - AI Math Tutor
+# Calculo
 
-An intelligent mathematics problem generator and tutor powered by Google's Gemini AI. Calculo helps students learn by generating rigorous problems, providing step-by-step solutions, and offering progressive hints.
+**An AI math tutor that writes practice problems at the level you ask for, then walks you through the solution one hint at a time.**
 
-View your app in AI Studio: https://ai.studio/apps/drive/1d8jivbNyLhgDARGDmQJPJGljTIfg2I42
+Type a topic — "derivatives of trigonometric functions", "conditional probability" — pick a difficulty from review to olympiad, and Calculo (built in Google AI Studio as "Math Architect") asks Gemini to compose a fresh problem with a worked, LaTeX-rendered solution.
 
-## Features
+- **Hints before answers** — each solution step can be revealed as a nudge, a partial hint, or the full explanation.
+- **Practise the same idea again** — generate similar problems, flashcards, or a multiple-choice quiz from any problem.
+- **Diagrams** — geometry problems can come with a generated figure.
+- **Keep your work** — history is saved locally and any session exports to PDF.
 
-### 🎯 Core Features
-- **Problem Generation**: Create custom math problems across multiple domains (calculus, algebra, geometry, etc.)
-- **Difficulty Scaling**: Topic-aware difficulty levels from review (1x) to Olympiad-level (max)
-- **Multiple Modes**: Problems, Flashcards, and Quiz modes
-- **Step-by-Step Solutions**: Detailed explanations with LaTeX-rendered equations
-- **Visual Confirmation**: Generate geometric diagrams with AI
+AI Studio app: https://ai.studio/apps/drive/1d8jivbNyLhgDARGDmQJPJGljTIfg2I42
 
-### 💡 Learning Features
-- **Progressive Hints**: Get nudges, partial hints, or full explanations for each solution step
-- **Interactive Step Explanations**: Click any step to get a detailed explanation from the AI tutor
-- **Similar Problems**: Generate variations of problems to practice the same concepts
-- **Flashcard Generation**: Auto-generate concept flashcards from problems
-- **Quiz Mode**: Multiple-choice quizzes with explanations
+## Quick start
 
-### 🎨 UX Enhancements
-- **Smart Loading States**: Skeleton loaders show while content generates
-- **Toast Notifications**: Real-time feedback for actions
-- **Keyboard Shortcuts**: Efficient navigation and control
-- **History Tracking**: Save and restore previous sessions
-- **PDF Export**: Export problems and solutions
+```bash
+npm install
+echo "GEMINI_API_KEY=..." > .env.local   # your own key
+npm run dev
+```
 
-### 🔧 Technical Features
-- **Retry Logic**: Automatic retry with exponential backoff for API failures
-- **Caching**: Store generated problems to reduce redundant API calls
-- **Chain-of-Thought Prompting**: Enhanced AI reasoning for better problem quality
-- **Hybrid Architecture**: Cost-optimized with Flash model for analysis, Pro model for generation
+`npm run build` and `npm run preview` produce and serve a production build.
 
-## Keyboard Shortcuts
+## Configuration
 
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl/Cmd + .` | Toggle debug panel |
-| `Ctrl/Cmd + H` | Toggle history view |
-| `Ctrl/Cmd + Enter` | Generate problem (when idle) |
+| Key | Purpose |
+|---|---|
+| `GEMINI_API_KEY` | Google Gemini API key; Vite injects it into the client at build time |
 
-## Run Locally
+## How it works
 
-**Prerequisites:**  Node.js 16+
+```
+topic + difficulty ──▶ Gemini Flash (analyse the topic)
+                   ──▶ Gemini Pro (write problem + steps) ──▶ optional verify pass
+                   ──▶ render with KaTeX, cache, save to history
+```
 
-1. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+Shortcuts: `Ctrl/Cmd + Enter` generate, `Ctrl/Cmd + H` history, `Ctrl/Cmd + .` debug panel.
 
-2. **Set up environment variables:**
-   Create a `.env.local` file and add your Gemini API key:
-   ```
-   API_KEY=your_gemini_api_key_here
-   ```
+## Links
 
-3. **Run the development server:**
-   ```bash
-   npm run dev
-   ```
-
-4. **Build for production:**
-   ```bash
-   npm run build
-   ```
-
-## Architecture
-
-### Service Layer (`services/gemini.ts`)
-- **Analyst Pass**: Uses Gemini Flash to analyze context and extract key concepts
-- **Architect Mode**: Uses Gemini Pro to generate rigorous problems
-- **Hint Generation**: Progressive hint system with multiple detail levels
-- **Verification**: Optional verification pass to ensure problem correctness
-
-### Component Structure
-- `App.tsx`: Main application with routing and state management
-- `InputForm.tsx`: Problem generation interface with difficulty slider
-- `ProblemDisplay.tsx`: Interactive problem viewer with hints and explanations
-- `Toast.tsx`: Notification system
-- `ProblemSkeleton.tsx`: Loading state component
-- `HintButton.tsx`: Progressive hint interface
-
-### Utilities
-- `utils/retry.ts`: Exponential backoff retry logic
-- `utils/cache.ts`: In-memory caching for generated problems
-
-## Usage Tips
-
-1. **Getting Started**: Enter a topic (e.g., "derivatives of trigonometric functions") and select difficulty
-2. **Using Hints**: Hover over solution steps to reveal progressive hint buttons (nudge → partial → full)
-3. **Similar Problems**: After completing a problem, generate variations to practice
-4. **History**: All generated content is saved locally and can be restored from the history panel
-5. **Debug Mode**: Use Ctrl/Cmd+. to view detailed generation metrics and prompts
-
-## Contributing
-
-This project uses:
-- React 19 with TypeScript
-- Vite for build tooling
-- Tailwind CSS for styling
-- Google Gemini AI for content generation
-
-## License
-
-See LICENSE file for details.
+- [docs/internals.md](docs/internals.md) — the full previous README: feature list, component map, architecture notes
+- [CHANGELOG.md](CHANGELOG.md), [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md)
